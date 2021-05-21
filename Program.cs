@@ -17,12 +17,13 @@ namespace Revisao
                 {
                     case "1":
                         Console.WriteLine("Informe o nome do aluno:");
-                        Aluno aluno = new Aluno();
+                        var aluno = new Aluno();
                         aluno.Nome = Console.ReadLine();
 
 
                         Console.WriteLine("Informe a nota do Aluno:");
-                        if (decimal.TryParse(Console.ReadLine(), out decimal nota)
+                        
+                        if (decimal.TryParse(Console.ReadLine(), out decimal nota))
                         {
                             aluno.Nota = nota;
                         }
@@ -33,15 +34,59 @@ namespace Revisao
                         }
 
                         alunos[indiceAluno] = aluno;
+                        indiceAluno++;
 
                         break;
 
                     case "2":
-                        //TODO: listar alunos
+                        foreach(var a in alunos )
+                        {
+                            if (!string.IsNullOrEmpty(a.Nome))
+                            {
+                                 Console.WriteLine($"ALUNO: {a.Nome} - NOTA: {a.Nota}"); 
+                            } 
+                        }
                         break;
 
                     case "3":
-                        //TODO: calcular media geral
+                        decimal notaTotal = 0;
+                        var nrAlunos = 0;
+
+                        for(int i=0; i < alunos.Length; i++)
+                        {
+                            if (!string.IsNullOrEmpty(alunos[i].Nome))
+                            {
+                                notaTotal = notaTotal + alunos[i].Nota;
+                                nrAlunos++;
+                            }
+                        }
+
+                        var mediaGeral = notaTotal / nrAlunos;
+                        Conceitos conceitoGeral;
+
+                        if (mediaGeral < 2)
+                        {
+                            conceitoGeral = Conceitos.E;
+                        }
+                        else if (mediaGeral < 4)
+                        {
+                            conceitoGeral = Conceitos.D;
+                        }
+                        else if (mediaGeral < 6)
+                        {
+                            conceitoGeral = Conceitos.C;
+                        }
+                         else if (mediaGeral < 8)
+                        {
+                            conceitoGeral = Conceitos.B;
+                        }
+                         else
+                        {
+                            conceitoGeral = Conceitos.A;
+                        }
+
+                        Console.WriteLine($"MÉDIA GERAL: {mediaGeral} - CONCEITO: {conceitoGeral}");
+                        
                         break;
 
                     default:
@@ -49,19 +94,14 @@ namespace Revisao
                         throw new ArgumentOutOfRangeException();
                 }
 
-                Console.WriteLine("Informe a opção desejada:");
-                Console.WriteLine("1 - Inserir novo aluno");
-                Console.WriteLine("2 - Listar alunos");
-                Console.WriteLine("3 - Calcular média geral");
-                Console.WriteLine("X - Sair");
-                Console.WriteLine();
-
-                opcaoUsuario = Console.ReadLine();
+               
+                opcaoUsuario = ObterOpcaoUsuario();
             }
         }
 
         private static string ObterOpcaoUsuario()
         {
+            Console.WriteLine();
             Console.WriteLine("Informe a opção desejada:");
             Console.WriteLine("1 - Inserir novo aluno");
             Console.WriteLine("2 - Listar alunos");
